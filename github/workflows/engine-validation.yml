@@ -1,0 +1,39 @@
+name: TUM Engine Validation Suite
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate-engine:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Source Code Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python Environment
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+
+    - name: Install Pinned Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Run Core Parametric Test Frame
+      run: |
+        python -c "
+        import numpy as np
+        from src.engine import TUMCalibratedEnginePRO
+        engine = TUMCalibratedEnginePRO(block_size=96)
+        raw_bits = np.random.randint(0, 2, 96)
+        c_low = engine.transmit_bitstream_frame(raw_bits, 0.05)
+        c_high = engine.transmit_bitstream_frame(raw_bits, 50.0)
+        print(f'CI Verification Success. Low-noise: {c_low:.2f} bps | High-noise: {c_high:.2f} bps')
+        assert c_low > c_high, 'Thermodynamic Phase Transition Inequality Fault!'
+        "
