@@ -1,0 +1,17 @@
+contextual-information-theory/
+├── .github/
+│   └── workflows/
+│       └── engine-validation.yml   # Automated continuous integration test
+├── data/
+│   ├── tum_capacity_sweep.csv       # Pre-calculated primary calibration logs
+│   └── tum_ber_analysis.csv         # Pre-calculated bit error rate logs
+├── notebooks/
+│   └── cit_interactive_sandbox.ipynb# Interactive Google Colab workspace playground
+├── src/
+│   ├── __init__.py
+│   ├── engine.py                   # TUMCalibratedEnginePRO class blueprint
+│   └── sweeper.py                  # Parametric sweep pipeline script
+├── .gitignore
+├── LICENSE                          # Typically MIT or Apache 2.0 for open science
+├── README.md                        # Production-grade user & reviewer documentation
+└── requirements.txt                 # Exact environment pin tracking (numpy, pandas, matplotlib)
